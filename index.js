@@ -41,8 +41,20 @@ async function run() {
         })
 
         app.get('/booking', async (req, res) => {
-          const cursor = await bookingCollection.find().toArray();
-          res.send(cursor);
+            console.log(req.query.email);
+            let query = {};
+            if (req.query?.email) {
+                query = { email: req.query.email }
+            }
+            const cursor = await bookingCollection.find(query).toArray();
+            res.send(cursor);
+        })
+
+        app.delete('/booking', async(req,res)=>{
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            const cursor = await bookingCollection.deleteOne(query);
+            res.send(cursor);
         })
 
         app.get('/services', async (req, res) => {
